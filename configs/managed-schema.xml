@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema name="runbook-schema" version="1.6">
+  <field name="_version_" type="plong" indexed="false" stored="false"/>
+  <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+  <uniqueKey>id</uniqueKey>
+  <field name="description" type="text_general" indexed="true" stored="true"/>
+  <dynamicField name="*_s"  type="string"  indexed="true"  stored="true" />
+  <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+  <fieldType name="plong" class="solr.LongPointField" docValues="true"/>
+  <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
+    <analyzer>
+      <tokenizer class="solr.StandardTokenizerFactory"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+    </analyzer>
+  </fieldType>
+</schema>
