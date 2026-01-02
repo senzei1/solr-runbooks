@@ -7,7 +7,7 @@ The objective of this runbook is to validate the High Availability (HA) and self
 * **Environment:** Cloudera CDP (Solr 7.x / 8.x)
 * **Access:** Root or sudo access to Solr nodes.
 * **Authentication:** Kerberos ticket (`kinit`) required for `solrctl` and `curl`.
-* **Tools:** `solrctl` (standard for CDP), `curl`, `systemctl`, `ps`, `kill`, `grep`.
+* **Tools:** `solrctl` (standard for CDP), `curl`, `systemctl`, `ps`, `kill`, `grep`, `phyton3`.
 * **Zookeeper:** Access to the Zookeeper ensemble (Port 2181).
 
 ---
