@@ -5,13 +5,13 @@ Ranger writes audit logs to "Infra Solr" (a dedicated Solr instance for internal
 
 * **Audit Destinations:** Ranger can write to multiple destinations simultaneously (HDFS, Solr, Amazon S3, etc.). Solr is preferred for real-time indexing and searchability via the Ranger UI.
 * **Collection Name:** `ranger_audits`
-* **Config Set:** Usually named `ranger_audits` or similar, stored in Zookeeper (e.g., `/infra-solr/configs/ranger_audits`).
+* **Config Set:** Usually named `ranger_audits`, stored in Zookeeper (e.g., `/infra-solr/configs/ranger_audits`).
 
 ### Sharding Strategy
 Proper sharding is critical for write throughput and search performance.
-* **`ranger.audit.solr.no.shards`:** Defines the number of shards for the audit collection.
-* **`ranger.audit.solr.max.shards.per.node`:** Defines the maximum replicas/shards a single Solr node can host.
-* **SME Tip:** If you expand the Solr cluster, you must manually trigger a SPLITSHARD or create a new collection with more shards to utilize the new nodes; Solr does not automatically re-balance existing shards to new nodes for write scalability.
+* **`ranger.audit.solr.no.replica`:** Defines the number of replicas for the audit collection.
+* **`ranger.audit.solr.max.shards.per.node`:** Defines the maximum shards a single Solr node can host.
+* **Tip:** If you expand the Solr cluster, you must manually trigger a SPLITSHARD or create a new collection with more shards to utilize the new nodes; Solr does not automatically rebalance existing shards to new nodes for write scalability.
 
 ---
 
@@ -30,12 +30,12 @@ Ranger uses a **Time-To-Live (TTL)** mechanism or a **Max Audit Age** setting to
     * Key parameter: `<int name="autoDelete">1</int>` (Enables auto-deletion).
     * Key parameter: `<str name="ttl">90DAYS</str>` (Sets the retention period).
 
-> **⚠️ Important SME Note:** Simply changing the retention days in the Ranger UI **will not** immediately update the underlying `solrconfig.xml` in Zookeeper. You often need to:
+> **⚠️ Important Note:** Simply changing the retention days in the Ranger UI **will not** immediately update the underlying `solrconfig.xml` in Zookeeper. You need to:
 > 1.  Update the configuration in the UI.
 > 2.  Verify the config in Zookeeper (`/infra-solr/configs/ranger_audits/solrconfig.xml`).
 > 3.  **Reload the Collection** via the Solr API for changes to take effect.
 > 
-> Also, only new documents will be affected by this change, older documents will keep the previous value.
+> Also, only new documents will be affected by this change; older documents will keep the previous value and need to be removed manually.
 ---
 
 ## 3. Automation Script: TTL Validator
